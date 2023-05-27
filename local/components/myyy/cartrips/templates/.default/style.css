@@ -1,0 +1,41 @@
+
+form{
+	width: 323px;
+	display: flex;
+	flex-direction: column;
+	margin: 0 auto 0 auto;
+}
+
+input{
+	height: 40px;
+	margin: 10px 10px;
+	padding: 0 10px;
+	border-radius: 5px;
+	border: 2px solid #b8b8b8;
+	font-size: 22px;
+}
+.btnshow{
+	cursor: pointer;
+	background-color: #efefef;
+}
+.btnshow:hover{
+	background-color: #dedede;
+	transition: background-color 0.1s linear;
+}
+
+.err{
+	color: red;
+	font-size: 18px;
+	padding-left: 10px;
+	text-align: center;
+
+}
+.hidden{
+	visibility: hidden;
+	font-size: 18px;
+	padding-left: 10px;
+}
+.none{
+	display: none;
+}
+
