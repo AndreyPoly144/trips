@@ -31,5 +31,33 @@ window.onload = function () {
         }
     }
 
+    function carHandler(e) {
+        if (e.target.className == 'car') {
+            err.textContent = '';
+            const data = new FormData();
+            data.append("carid", e.target.dataset.carid);
+            data.append("start", start.value);
+            data.append("end", end.value);
+            let xhttp = new XMLHttpRequest();
+
+            xhttp.onreadystatechange = function () {
+                if (xhttp.readyState == 4 && xhttp.status == 200) {
+                    block.replaceChildren();
+                    if (xhttp.response.status == 'error') {
+                        err.textContent = xhttp.response.message;
+                    }
+                    if (xhttp.response.status == 'success') {
+                        err.textContent = xhttp.response.message;
+                    }
+                }
+            }
+
+            xhttp.open('POST', '/local/components/myyy/cartrips/templates/.default/handling/car.php', true);
+            xhttp.responseType = 'json';
+            xhttp.send(data);
+        }
+    }
+
     btn.addEventListener('click', btnHandler);
+    document.documentElement.addEventListener('click', carHandler)
 }

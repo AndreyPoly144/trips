@@ -34,18 +34,28 @@ if ($_GET['car'] == 'list') {         //если нажали на кнопку
             exit;
         }
 
-        //если машина находится в поездке и время поездки заходит в диапозон от $start до $end, то такую машину удаляем из списка
         $cars = $_SESSION['cars'];
         foreach ($cars as $carid => $car) {
-            $carStart = strtotime($car['PROPERTY_STARTTIME_VALUE']);
-            $carEnd = strtotime($car['PROPERTY_ENDTIME_VALUE']);
-            if ($carStart > $start && $carStart < $end) {
-                unset($cars[$carid]);
-                continue;
-            }
-            if ($carEnd > $start && $carEnd < $end) {
-                unset($cars[$carid]);
-                continue;
+            if (!empty($car['trips'])) {
+                foreach ($car['trips'] as $tripid => $trip) {
+                    $carStart = strtotime($trip['start']);
+                    $carEnd = strtotime($trip['end']);
+                    if ($start < $carStart && $end > $carStart) {
+                        unset($cars[$carid]);
+                        continue;
+                    }
+                    if ($start < $carEnd && $end > $carEnd) {
+                        unset($cars[$carid]);
+                        continue;
+                    }
+                    if ($start >= $carStart && $end <= $carEnd) {
+                        unset($cars[$carid]);
+                        continue;
+                    }
+                    if ($start <= $carStart && $end >= $carEnd) {
+                        unset($cars[$carid]);
+                    }
+                }
             }
         }
 
@@ -61,9 +71,9 @@ if ($_GET['car'] == 'list') {         //если нажали на кнопку
 
         //кладем в буфер вывод всех свободных автомобилей и отправляет в js ответ
         ob_start();
-        echo '<p>Свободные автомобили по указаному времени</p>';
+        echo '<p>Кликните по свободному автомобилю, чтобы забронировать его на указанное время</p>';
         foreach ($cars as $car) {
-            echo "<p>{$car['NAME']} -{$car['PROPERTY_MODELID_PROPERTY_MODELNAME_VALUE']} - {$car['categoryName']} - {$car['PROPERTY_DRIVERID_PROPERTY_DRIVERNAME_VALUE']}</p>";
+            echo "<p class='car' data-carid='{$car['ID']}'>{$car['NAME']} -{$car['PROPERTY_MODELID_PROPERTY_MODELNAME_VALUE']} - {$car['categoryName']} - {$car['PROPERTY_DRIVERID_PROPERTY_DRIVERNAME_VALUE']}</p>";
         }
         $output = ob_get_contents();
         ob_end_clean();

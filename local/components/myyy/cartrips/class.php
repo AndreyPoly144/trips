@@ -77,11 +77,16 @@ class testList extends CBitrixComponent
             ['PROPERTY_MODELID' => $arrCarModels],
             false,
             [],
-            ['ID', 'NAME', 'IBLOCK_ID', 'PROPERTY_MODELID', 'PROPERTY_DRIVERID', 'PROPERTY_MODELID.PROPERTY_MODELNAME', 'PROPERTY_MODELID.PROPERTY_CATEGORYID', 'PROPERTY_DRIVERID.PROPERTY_DRIVERNAME', 'PROPERTY_STARTTIME', 'PROPERTY_ENDTIME']
+            ['ID', 'NAME', 'IBLOCK_ID', 'PROPERTY_MODELID', 'PROPERTY_DRIVERID', 'PROPERTY_MODELID.PROPERTY_MODELNAME', 'PROPERTY_MODELID.PROPERTY_CATEGORYID', 'PROPERTY_DRIVERID.PROPERTY_DRIVERNAME', 'PROPERTY_TRIPSID', 'PROPERTY_TRIPSID.PROPERTY_STARTTIME', 'PROPERTY_TRIPSID.PROPERTY_ENDTIME']
         );
         while ($ob = $res->GetNextElement()) {
             $arFields = $ob->GetFields();
-            $arrCarList[$arFields['ID']] = $arFields;
+            if (empty($arrCarList[$arFields['ID']])) {
+                $arrCarList[$arFields['ID']] = $arFields;
+            }
+            if (!empty($arFields['PROPERTY_TRIPSID_VALUE'])) {
+                $arrCarList[$arFields['ID']]['trips'][$arFields['PROPERTY_TRIPSID_VALUE']] = ['start' => $arFields['PROPERTY_TRIPSID_PROPERTY_STARTTIME_VALUE'], 'end' => $arFields['PROPERTY_TRIPSID_PROPERTY_ENDTIME_VALUE']];
+            }
         }
 
         //заносим в список машин название категории для каждой машины

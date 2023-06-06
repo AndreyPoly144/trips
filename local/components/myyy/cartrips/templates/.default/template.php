@@ -2,9 +2,8 @@
 if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true) die();
 
 $session = \Bitrix\Main\Application::getInstance()->getSession();
-if (!$session->has('cars')) {
-    $session->set('cars', $arResult);
-}
+$session->set('cars', $arResult);
+
 ?>
 
 <form>
